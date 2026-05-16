@@ -97,13 +97,45 @@
       "كيف حالك":["😀 بخير والحمد لله، ماذا عنك؟"],
       "ماهي قدراتك":["🤖 أستطيع الإجابة على أسئلة عامة."],
       "متى تمت برمجتك":["⌛ تمت برمجتي من طرف المبتكر يوسف فارسي سنة 2022."],
-      "هل انت ذكي":["🧠 نعم، أنا ذكي."],
-      "من برمجك":["👨‍💻 المبتكر يوسف فارسي."],
       "شكرا":["🙏 على الرحب والسعة!"],
-      "مع السلامة":["👋 إلى اللقاء، أراك لاحقا!"]
+      "مع السلامة":["👋 إلى اللقاء، أراك لاحقا!"],
+      
+      // صيغ الأسئلة المتعلقة بيوسف فارسي
+      "يوسف فارسي":["هو يوسف فارسي من مواليد الشريعة ولاية تبسة خبير في عدة مجالات."],
+      "من هو يوسف":["هو يوسف فارسي من مواليد الشريعة ولاية تبسة خبير في عدة مجالات."],
+      "معلومات عن يوسف":["هو يوسف فارسي من مواليد الشريعة ولاية تبسة خبير في عدة مجالات."],
+      
+      // صيغ الأسئلة عن تاريخ الميلاد
+      "تاريخ الميلاد":["10 نوفمبر 1988 يوم الخميس على الساعة الثامنة صباحا."],
+      "متى ولد يوسف":["10 نوفمبر 1988 يوم الخميس على الساعة الثامنة صباحا."],
+      "تاريخ ميلاده":["10 نوفمبر 1988 يوم الخميس على الساعة الثامنة صباحا."],
+      "مولد يوسف":["10 نوفمبر 1988 يوم الخميس على الساعة الثامنة صباحا."],
+      
+      // صيغ الأسئلة عن الوالدين والأب
+      "ابن من":["هو ابن بلقاسم وأمه تونسي فاطمة."],
+      "من ابوه":["هو ابن بلقاسم وأمه تونسي فاطمة."],
+      "من هو والده":["هو ابن بلقاسم وأمه تونسي فاطمة."],
+      "اسم والده":["هو ابن بلقاسم وأمه تونسي فاطمة."],
+      "من امه":["أمه هي تونسي فاطمة وهو ابن بلقاسم."],
+      
+      // صيغ الأسئلة عن السكن والإقامة
+      "اين يسكن":["الشريعة ولاية تبسة دولة الجزائر."],
+      "اين يعيش":["الشريعة ولاية تبسة دولة الجزائر."],
+      "مكان اقامته":["الشريعة ولاية تبسة دولة الجزائر."],
+      "اين يقطن":["الشريعة ولاية تبسة دولة الجزائر."],
+      
+      // صيغ الأسئلة عن الذكاء
+      "هل هو ذكي":["نعم يوسف ذكي جدا بل هو عبقري."],
+      "هل يوسف ذكي":["نعم يوسف ذكي جدا بل هو عبقري."],
+      "ذكاء يوسف":["نعم يوسف ذكي جدا بل هو عبقري."],
+      
+      // صيغ الأسئلة عن الصانع والمبرمج
+      "من صنعك":["صنعني المبتكر يوسف فارسي."],
+      "من برمجك":["صنعني المبتكر يوسف فارسي."],
+      "من طورك":["صنعني المبتكر يوسف فارسي."]
     };
 
-    let memory=[]; let askedQuestions={};
+    let memory=[]; let askedQuestions={}; let fallbackCount=0;
 
     function copyToClipboard(text){navigator.clipboard.writeText(text).then(()=>showToast());}
     function showToast(){const toast=document.getElementById("toast");toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2000);}
@@ -119,7 +151,7 @@
         function typing(){if(i<text.length){div.textContent+=text.charAt(i);i++;messagesDiv.scrollTop=messagesDiv.scrollHeight;setTimeout(typing,35);}}typing();}
     }
     function addMessage(text,sender){typeMessage(text,sender);}
-    function clearChat(){messagesDiv.innerHTML="";memory=[];askedQuestions={};addMessage("🧹 تم مسح المحادثة. مرحبا من جديد 👋","bot");}
+    function clearChat(){messagesDiv.innerHTML="";memory=[];askedQuestions={};fallbackCount=0;addMessage("🧹 تم مسح المحادثة. مرحبا من جديد 👋","bot");}
 
     function cleanQuestion(raw){
       if(!raw) return "";
@@ -131,7 +163,7 @@
 
     function checkKnowledgeBase(userMsg){
       if(!userMsg) return null;
-      const lower=userMsg.toLowerCase();
+      const lower=userMsg.toLowerCase().trim();
       for(let key in knowledgeBase){
         if(lower.includes(key)){
           const answers=knowledgeBase[key];
@@ -205,243 +237,14 @@
       }
 
       if(!answer){
-        const fallback=[
-          "أنا فقط أجيب على الأسئلة العامة",
-          "أنا آسف ليس عندي إجابة",
-          "لا أستطيع الإجابة عن هذا السؤال",
-          "أنا أجيب على الأسئلة الثقافية فقط",
-          "أنا أفهمك بالعربية الفصحى فقط لا تتكلم بالدارجة"
-        ];
-        answer=fallback[Math.floor(Math.random()*fallback.length)];
-      }
-
-      const last=messagesDiv.lastChild;
-      if(last && last.classList.contains("bot") && last.textContent.includes("⏳")) last.remove();
-
-      addMessage(answer,"bot");
-      memory.push({role:"assistant",content:answer});
-      if(memory.length>6) memory.splice(0,memory.length-6);
-    }
-
-    window.onload=()=>{addMessage("👋 مرحبا! أنا يوسف فارسي روبوت ذكاء اصطناعي. تفضل بالسؤال.","bot");}
-    input.addEventListener("keydown",function(e){if(e.key==="Enter")sendMessage();});
-  </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🤖 روبوت يوسف فارسي</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    /* نفس التنسيق السابق */
-    :root {
-      --primary-color: #1abc9c;
-      --background-dark: #121c2c;
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --font-color-light: #e8fdf9;
-      --input-bg: rgba(255, 255, 255, 0.1);
-      --danger-color: #e74c3c;
-    }
-    body {
-      margin: 0;
-      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
-      background: radial-gradient(circle at top right, #1f2738 0%, #10141f 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      flex-direction: column;
-      color: var(--font-color-light);
-    }
-    .logo { font-size: 3.5rem; font-weight: bold; font-family: 'Cairo','IBM Plex Sans Arabic',sans-serif;
-      background: linear-gradient(45deg, var(--primary-color), #2ecc71, #3498db);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      margin-bottom: 20px; text-shadow: 0 0 15px rgba(26, 188, 156, 0.6);
-    }
-    #chat { width:95%; max-width:550px; background:var(--card-bg); backdrop-filter:blur(15px);
-      border-radius:25px; box-shadow:0 10px 50px rgba(0,0,0,0.3);
-      display:flex; flex-direction:column; overflow:hidden;
-      border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;}
-    #messages {flex:1; padding:15px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;
-      scroll-behavior:smooth; max-height:70vh;}
-    #messages::-webkit-scrollbar {width:8px;}
-    #messages::-webkit-scrollbar-thumb {background-color:var(--primary-color); border-radius:10px;}
-    #messages::-webkit-scrollbar-track {background-color:rgba(255,255,255,0.05);}
-    .msg {margin:8px; padding:12px 18px; border-radius:25px; max-width:75%;
-      line-height:1.4; word-break:break-word; box-shadow:0 4px 10px rgba(0,0,0,0.2);
-      user-select:text; -webkit-user-select:text; cursor:text; position:relative;}
-    .user {background:linear-gradient(135deg,#1abc9c,#2980b9); color:#fff; margin-left:auto;
-      border-top-left-radius:25px; border-bottom-left-radius:25px; border-bottom-right-radius:8px;}
-    .bot {background:linear-gradient(135deg,#2c3e50,#34495e); color:var(--font-color-light);
-      margin-right:auto; border-top-right-radius:25px; border-bottom-right-radius:25px;
-      border-bottom-left-radius:8px; position:relative; padding-right:35px;}
-    .bot::before {content:'🤖'; position:absolute; top:-15px; right:-10px; font-size:1.5em;
-      opacity:0.5; color:var(--primary-color); transform:rotate(10deg);}
-    .copy-btn {position:absolute; top:-15px; right:-15px; background:var(--primary-color); border:none;
-      color:#fff; font-size:16px; cursor:pointer; padding:6px 10px; border-radius:50%;
-      box-shadow:0 2px 6px rgba(0,0,0,0.2);}
-    #input-area {display:flex; border-top:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05);}
-    #input {flex:1; border:none; padding:15px; font-size:16px; outline:none; background:transparent; color:var(--font-color-light);}
-    #input::placeholder {color:rgba(255,255,255,0.5);}
-    button {border:none; padding:0 20px; cursor:pointer; font-size:18px; background:transparent; color:var(--font-color-light);}
-    .send-btn {background:var(--primary-color); color:#fff;}
-    #clear-btn {background:var(--danger-color); color:#fff; border-radius:12px; font-size:22px;
-      padding:10px 30px; box-shadow:0 4px 10px rgba(0,0,0,0.3); border:none; cursor:pointer; transition:transform 0.2s ease-in-out;}
-    #clear-btn:hover {transform:scale(1.05);}
-    .toast {visibility:hidden; min-width:220px; background-color:#333; color:#fff; text-align:center;
-      border-radius:12px; padding:12px; position:fixed; bottom:30px; right:30px; font-size:16px;
-      box-shadow:0 4px 10px rgba(0,0,0,0.3); opacity:0; transform:translateY(20px);
-      transition:all 0.5s ease; z-index:1000;}
-    .toast.show {visibility:visible; opacity:1; transform:translateY(0);}
-  </style>
-</head>
-<body>
-  <div class="logo">فارسي يوسف</div>
-  <div id="chat">
-    <div id="messages"></div>
-    <div id="input-area">
-      <input id="input" type="text" placeholder="✍️ اكتب سؤالك..." />
-      <button class="send-btn" onclick="sendMessage()">إرسال</button>
-    </div>
-  </div>
-  <button id="clear-btn" onclick="clearChat()">🗑️</button>
-  <div id="toast" class="toast">✅ تم نسخ نصك 👋</div>
-
-  <script>
-    const messagesDiv=document.getElementById("messages");
-    const input=document.getElementById("input");
-
-    const knowledgeBase={
-      "من انت":["أنا يوسف فارسي 🤖، روبوت ذكاء اصطناعي هنا لمساعدتك."],
-      "اسمك":["اسمي يوسف فارسي 🤖."],
-      "مرحبا":["👋 أهلا وسهلا بك! كيف يمكنني مساعدتك؟"],
-      "اهلا":["👋 أهلا وسهلا! كيف حالك؟"],
-      "السلام عليكم":["وعليكم السلام ورحمة الله وبركاته 🤲"],
-      "صباح الخير":["☀️ صباح النور والسرور!"],
-      "مساء الخير":["🌙 مساء الورد والياسمين."],
-      "كيف حالك":["😀 بخير والحمد لله، ماذا عنك؟"],
-      "ماهي قدراتك":["🤖 أستطيع الإجابة على أسئلة عامة."],
-      "متى تمت برمجتك":["⌛ تمت برمجتي من طرف المبتكر يوسف فارسي سنة 2022."],
-      "هل انت ذكي":["🧠 نعم، أنا ذكي."],
-      "من برمجك":["👨‍💻 المبتكر يوسف فارسي."],
-      "شكرا":["🙏 على الرحب والسعة!"],
-      "مع السلامة":["👋 إلى اللقاء، أراك لاحقا!"]
-    };
-
-    let memory=[]; let askedQuestions={};
-
-    function copyToClipboard(text){navigator.clipboard.writeText(text).then(()=>showToast());}
-    function showToast(){const toast=document.getElementById("toast");toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2000);}
-    function typeMessage(text,sender){
-      const div=document.createElement("div"); div.className="msg "+sender;
-      if(sender==="bot"){const span=document.createElement("span"); div.appendChild(span);
-        const copyBtn=document.createElement("button"); copyBtn.className="copy-btn"; copyBtn.textContent="📋";
-        copyBtn.onclick=()=>copyToClipboard(span.textContent); div.appendChild(copyBtn); messagesDiv.appendChild(div);
-        messagesDiv.scrollTop=messagesDiv.scrollHeight; let i=0;
-        function typing(){if(i<text.length){span.textContent+=text.charAt(i);i++;messagesDiv.scrollTop=messagesDiv.scrollHeight;setTimeout(typing,35);}}
-        typing();
-      } else {messagesDiv.appendChild(div); messagesDiv.scrollTop=messagesDiv.scrollHeight; let i=0;
-        function typing(){if(i<text.length){div.textContent+=text.charAt(i);i++;messagesDiv.scrollTop=messagesDiv.scrollHeight;setTimeout(typing,35);}}typing();}
-    }
-    function addMessage(text,sender){typeMessage(text,sender);}
-    function clearChat(){messagesDiv.innerHTML="";memory=[];askedQuestions={};addMessage("🧹 تم مسح المحادثة. مرحبا من جديد 👋","bot");}
-
-    function cleanQuestion(raw){
-      if(!raw) return "";
-      let text=raw.replace(/[؟?!.,؛:"]/g," ");
-      const stopWords=["من","ما","ماذا","أين","متى","كيف","هل","هو","هي","عن","ماهي","ماهو","ماهية","لمتى","عرف","تعريف","مفهوم","توثيح"];
-      let words=text.split(/\s+/).filter(w=>w.trim().length>0&&!stopWords.includes(w.trim()));
-      return words.join(" ").trim();
-    }
-
-    function checkKnowledgeBase(userMsg){
-      if(!userMsg) return null;
-      const lower=userMsg.toLowerCase();
-      for(let key in knowledgeBase){
-        if(lower.includes(key)){
-          const answers=knowledgeBase[key];
-          return answers[Math.floor(Math.random()*answers.length)]+" 🔴";
+        fallbackCount++;
+        if(fallbackCount===1){
+          answer="أنا يوسف فارسي الآلي مهمتي الإجابة عن الأسئلة الثقافية فقط  لا أزال في مرحلة التطوير";
+        }else if(fallbackCount===2){
+          answer="يمكنك أن تسأل بخصوص يوسف ماذا تريد أن تعرف عنه";
+        }else{
+          answer="يمكنك أن تطرح سؤال مثل من هو عمر بن الخطاب مثلا او ماهي الحياة او أي سؤال ثقافي ...";
         }
-      }
-      return null;
-    }
-
-    async function searchWikipedia(query){
-      if(!query) return null;
-      try{
-        const url=`https://ar.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
-        const res=await fetch(url); if(!res.ok) return null;
-        const data=await res.json(); if(data.extract) return data.extract+" 🔵";
-      }catch(e){return null;} return null;
-    }
-
-    async function searchWikidata(query){
-      if(!query) return null;
-      try{
-        const searchUrl=`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(query)}&language=ar&format=json&origin=*`;
-        const searchRes=await fetch(searchUrl); const searchData=await searchRes.json();
-        if(!searchData.search||searchData.search.length===0) return null;
-        const qid=searchData.search[0].id;
-        const entityUrl=`https://www.wikidata.org/wiki/Special:EntityData/${qid}.json`;
-        const entityRes=await fetch(entityUrl); const entityData=await entityRes.json();
-        const entity=entityData.entities[qid];
-        if(entity && entity.descriptions && entity.descriptions.ar){
-          return entity.descriptions.ar.value+" 🟡";
-        }
-      }catch(e){return null;} return null;
-    }
-
-    async function searchArabicEncyclopedia(query){
-      if(!query) return null;
-      try{
-        const res=await fetch(`https://arab-ency.com/api/search?q=${encodeURIComponent(query)}`);
-        if(res.ok){const data=await res.json();
-          if(data && data.length>0) return (data[0].summary||data[0].title)+" 🟢";}
-      }catch(e){return null;} return null;
-    }
-
-    async function sendMessage(){
-      const text=input.value.trim(); if(!text) return;
-      addMessage(text,"user"); input.value="";
-      memory.push({role:"user",content:text});
-      if(memory.length>6) memory.splice(0,memory.length-6);
-
-      let kbAnswer=checkKnowledgeBase(text);
-      if(!kbAnswer){const cleaned=cleanQuestion(text); kbAnswer=checkKnowledgeBase(cleaned);}
-      if(kbAnswer){addMessage(kbAnswer,"bot"); memory.push({role:"assistant",content:kbAnswer}); return;}
-
-      const cleanedForSearch=cleanQuestion(text);
-      if(!askedQuestions[cleanedForSearch]) askedQuestions[cleanedForSearch]=1;
-      else askedQuestions[cleanedForSearch]++;
-
-      const count=askedQuestions[cleanedForSearch];
-      if(count===3){addMessage("🤖 إعادة نفس السؤال للمرة الثالثة يبدو أنك مريض نفسياً","bot");return;}
-      else if(count===4){addMessage("🤖 ايا روح تعطي تراميك","bot");return;}
-
-      addMessage("⏳ جاري البحث...","bot");
-
-      let answer=null;
-      if(count%3===1){
-        answer=await searchWikipedia(cleanedForSearch) || await searchWikidata(cleanedForSearch) || await searchArabicEncyclopedia(cleanedForSearch);
-      }else if(count%3===2){
-        answer=await searchWikidata(cleanedForSearch) || await searchWikipedia(cleanedForSearch) || await searchArabicEncyclopedia(cleanedForSearch);
-      }else{
-        answer=await searchArabicEncyclopedia(cleanedForSearch) || await searchWikipedia(cleanedForSearch) || await searchWikidata(cleanedForSearch);
-      }
-
-      if(!answer){
-        const fallback=[
-          "أنا فقط أجيب على الأسئلة العامة",
-          "أنا آسف ليس عندي إجابة",
-          "لا أستطيع الإجابة عن هذا السؤال",
-          "أنا أجيب على الأسئلة الثقافية فقط",
-          "أنا أفهمك بالعربية الفصحى فقط لا تتكلم بالدارجة"
-        ];
-        answer=fallback[Math.floor(Math.random()*fallback.length)];
       }
 
       const last=messagesDiv.lastChild;
