@@ -1,262 +1,371 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🤖 روبوت يوسف فارسي</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    /* نفس التنسيق السابق */
-    :root {
-      --primary-color: #1abc9c;
-      --background-dark: #121c2c;
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --font-color-light: #e8fdf9;
-      --input-bg: rgba(255, 255, 255, 0.1);
-      --danger-color: #e74c3c;
-    }
-    body {
-      margin: 0;
-      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
-      background: radial-gradient(circle at top right, #1f2738 0%, #10141f 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      flex-direction: column;
-      color: var(--font-color-light);
-    }
-    .logo { font-size: 3.5rem; font-weight: bold; font-family: 'Cairo','IBM Plex Sans Arabic',sans-serif;
-      background: linear-gradient(45deg, var(--primary-color), #2ecc71, #3498db);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      margin-bottom: 20px; text-shadow: 0 0 15px rgba(26, 188, 156, 0.6);
-    }
-    #chat { width:95%; max-width:550px; background:var(--card-bg); backdrop-filter:blur(15px);
-      border-radius:25px; box-shadow:0 10px 50px rgba(0,0,0,0.3);
-      display:flex; flex-direction:column; overflow:hidden;
-      border:1px solid rgba(255,255,255,0.1); margin-bottom:20px;}
-    #messages {flex:1; padding:15px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;
-      scroll-behavior:smooth; max-height:70vh;}
-    #messages::-webkit-scrollbar {width:8px;}
-    #messages::-webkit-scrollbar-thumb {background-color:var(--primary-color); border-radius:10px;}
-    #messages::-webkit-scrollbar-track {background-color:rgba(255,255,255,0.05);}
-    .msg {margin:8px; padding:12px 18px; border-radius:25px; max-width:75%;
-      line-height:1.4; word-break:break-word; box-shadow:0 4px 10px rgba(0,0,0,0.2);
-      user-select:text; -webkit-user-select:text; cursor:text; position:relative;}
-    .user {background:linear-gradient(135deg,#1abc9c,#2980b9); color:#fff; margin-left:auto;
-      border-top-left-radius:25px; border-bottom-left-radius:25px; border-bottom-right-radius:8px;}
-    .bot {background:linear-gradient(135deg,#2c3e50,#34495e); color:var(--font-color-light);
-      margin-right:auto; border-top-right-radius:25px; border-bottom-right-radius:25px;
-      border-bottom-left-radius:8px; position:relative; padding-right:35px;}
-    .bot::before {content:'🤖'; position:absolute; top:-15px; right:-10px; font-size:1.5em;
-      opacity:0.5; color:var(--primary-color); transform:rotate(10deg);}
-    .copy-btn {position:absolute; top:-15px; right:-15px; background:var(--primary-color); border:none;
-      color:#fff; font-size:16px; cursor:pointer; padding:6px 10px; border-radius:50%;
-      box-shadow:0 2px 6px rgba(0,0,0,0.2);}
-    #input-area {display:flex; border-top:1px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05);}
-    #input {flex:1; border:none; padding:15px; font-size:16px; outline:none; background:transparent; color:var(--font-color-light);}
-    #input::placeholder {color:rgba(255,255,255,0.5);}
-    button {border:none; padding:0 20px; cursor:pointer; font-size:18px; background:transparent; color:var(--font-color-light);}
-    .send-btn {background:var(--primary-color); color:#fff;}
-    #clear-btn {background:var(--danger-color); color:#fff; border-radius:12px; font-size:22px;
-      padding:10px 30px; box-shadow:0 4px 10px rgba(0,0,0,0.3); border:none; cursor:pointer; transition:transform 0.2s ease-in-out;}
-    #clear-btn:hover {transform:scale(1.05);}
-    .toast {visibility:hidden; min-width:220px; background-color:#333; color:#fff; text-align:center;
-      border-radius:12px; padding:12px; position:fixed; bottom:30px; right:30px; font-size:16px;
-      box-shadow:0 4px 10px rgba(0,0,0,0.3); opacity:0; transform:translateY(20px);
-      transition:all 0.5s ease; z-index:1000;}
-    .toast.show {visibility:visible; opacity:1; transform:translateY(0);}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>يوسف — مساعدك الذكي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0f1a;
+    --surface: #141827;
+    --surface2: #1c2235;
+    --border: rgba(99,179,255,0.12);
+    --accent: #4f9eff;
+    --accent2: #7c3aed;
+    --text: #e8edf5;
+    --text-muted: #7a8aa0;
+    --user-bg: linear-gradient(135deg, #4f9eff, #7c3aed);
+    --ai-bg: #1c2235;
+    --green: #10b981;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 24px;
+    background: rgba(20,24,39,0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    z-index: 10;
+  }
+  .avatar {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f9eff, #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    box-shadow: 0 0 20px rgba(79,158,255,0.4);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 2px; left: 2px;
+    width: 10px; height: 10px;
+    background: var(--green);
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 8px var(--green);
+  }
+  .header-info h1 {
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.2rem; font-weight: 700;
+    background: linear-gradient(135deg, #e8edf5, #4f9eff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header-info p { font-size: 0.75rem; color: var(--green); font-weight: 500; }
+  .header-badge {
+    margin-right: auto;
+    padding: 4px 12px;
+    background: rgba(79,158,255,0.1);
+    border: 1px solid rgba(79,158,255,0.2);
+    border-radius: 20px;
+    font-size: 0.7rem;
+    color: var(--accent);
+  }
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  #messages::-webkit-scrollbar { width: 4px; }
+  #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  .message {
+    display: flex;
+    gap: 10px;
+    animation: msgIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    max-width: 85%;
+  }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .message.user { align-self: flex-start; flex-direction: row-reverse; }
+  .message.ai { align-self: flex-end; }
+  .msg-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; margin-top: 2px;
+  }
+  .message.user .msg-avatar { background: linear-gradient(135deg, #4f9eff, #7c3aed); }
+  .message.ai .msg-avatar { background: linear-gradient(135deg, #7c3aed, #4f9eff); }
+  .msg-content { display: flex; flex-direction: column; gap: 4px; }
+  .msg-name { font-size: 0.72rem; color: var(--text-muted); padding: 0 4px; }
+  .message.user .msg-name { text-align: right; }
+  .msg-bubble {
+    padding: 12px 16px; border-radius: 18px;
+    font-size: 0.95rem; line-height: 1.7;
+    word-break: break-word;
+  }
+  .message.user .msg-bubble {
+    background: var(--user-bg); color: white;
+    border-radius: 18px 4px 18px 18px;
+    box-shadow: 0 4px 20px rgba(79,158,255,0.25);
+  }
+  .message.ai .msg-bubble {
+    background: var(--ai-bg); color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 4px 18px 18px 18px;
+  }
+  .msg-time { font-size: 0.65rem; color: var(--text-muted); padding: 0 4px; }
+  .message.user .msg-time { text-align: right; }
+  .typing-bubble { display: flex; align-items: center; gap: 6px; padding: 14px 18px; }
+  .typing-dot {
+    width: 7px; height: 7px;
+    background: var(--accent); border-radius: 50%;
+    animation: typingBounce 1.2s infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; background: #9b7fff; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; background: var(--accent2); }
+  @keyframes typingBounce {
+    0%,60%,100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+  .welcome { text-align: center; padding: 40px 20px; animation: fadeIn 0.6s ease both; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .welcome-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, #4f9eff, #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem; margin: 0 auto 16px;
+    box-shadow: 0 0 40px rgba(79,158,255,0.4);
+    animation: pulse 3s ease infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 40px rgba(79,158,255,0.4); }
+    50% { box-shadow: 0 0 60px rgba(79,158,255,0.6); }
+  }
+  .welcome h2 {
+    font-family: 'Cairo', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;
+    background: linear-gradient(135deg, #e8edf5, #4f9eff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .welcome p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; max-width: 300px; margin: 0 auto 24px; }
+  .suggestions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 360px; margin: 0 auto; }
+  .suggestion-btn {
+    padding: 8px 14px; background: var(--surface2);
+    border: 1px solid var(--border); border-radius: 20px;
+    color: var(--text-muted); font-family: 'Tajawal', sans-serif;
+    font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+  }
+  .suggestion-btn:hover {
+    background: rgba(79,158,255,0.1);
+    border-color: rgba(79,158,255,0.3);
+    color: var(--accent); transform: translateY(-2px);
+  }
+  #inputArea {
+    padding: 16px 20px;
+    background: rgba(20,24,39,0.95);
+    border-top: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+  }
+  .input-wrapper {
+    display: flex; align-items: flex-end; gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 24px; padding: 10px 10px 10px 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input-wrapper:focus-within {
+    border-color: rgba(79,158,255,0.4);
+    box-shadow: 0 0 20px rgba(79,158,255,0.1);
+  }
+  #userInput {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: var(--text); font-family: 'Tajawal', sans-serif;
+    font-size: 0.95rem; resize: none; max-height: 120px; line-height: 1.5;
+  }
+  #userInput::placeholder { color: var(--text-muted); }
+  #sendBtn {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #4f9eff, #7c3aed);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; color: white; flex-shrink: 0;
+    transition: all 0.2s; box-shadow: 0 4px 15px rgba(79,158,255,0.3);
+  }
+  #sendBtn:hover { transform: scale(1.08); }
+  #sendBtn:active { transform: scale(0.95); }
+  #sendBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .input-hint { text-align: center; font-size: 0.68rem; color: var(--text-muted); margin-top: 8px; }
+</style>
 </head>
 <body>
-  <div class="logo">فارسي يوسف</div>
-  <div id="chat">
-    <div id="messages"></div>
-    <div id="input-area">
-      <input id="input" type="text" placeholder="✍️ اكتب سؤالك..." />
-      <button class="send-btn" onclick="sendMessage()">إرسال</button>
+
+<header>
+  <div class="avatar">🤖</div>
+  <div class="header-info">
+    <h1>يوسف</h1>
+    <p>● متصل الآن</p>
+  </div>
+  <div class="header-badge">ذكاء اصطناعي</div>
+</header>
+
+<div id="messages">
+  <div class="welcome" id="welcome">
+    <div class="welcome-avatar">🤖</div>
+    <h2>مرحباً، أنا يوسف!</h2>
+    <p>مساعدك الذكي الشخصي. اسألني أي شيء وسأكون سعيداً بمساعدتك.</p>
+    <div class="suggestions">
+      <button class="suggestion-btn" onclick="suggest('من أنت؟')">من أنت؟</button>
+      <button class="suggestion-btn" onclick="suggest('ساعدني في كتابة رسالة')">كتابة رسالة ✍️</button>
+      <button class="suggestion-btn" onclick="suggest('اشرح لي الذكاء الاصطناعي ببساطة')">اشرح الذكاء الاصطناعي 🧠</button>
+      <button class="suggestion-btn" onclick="suggest('احكِ لي نكتة')">نكتة 😄</button>
+      <button class="suggestion-btn" onclick="suggest('ما هي نصائحك لتعلم البرمجة؟')">تعلم البرمجة 💻</button>
     </div>
   </div>
-  <button id="clear-btn" onclick="clearChat()">🗑️</button>
-  <div id="toast" class="toast">✅ تم نسخ نصك 👋</div>
+</div>
 
-  <script>
-    const messagesDiv=document.getElementById("messages");
-    const input=document.getElementById("input");
+<div id="inputArea">
+  <div class="input-wrapper">
+    <textarea id="userInput" placeholder="اكتب رسالتك ليوسف..." rows="1"></textarea>
+    <button id="sendBtn" onclick="sendMessage()">➤</button>
+  </div>
+  <div class="input-hint">اضغط Enter للإرسال • Shift+Enter لسطر جديد</div>
+</div>
 
-    const knowledgeBase={
-      "من انت":["أنا يوسف فارسي 🤖، روبوت ذكاء اصطناعي هنا لمساعدتك."],
-      "اسمك":["اسمي يوسف فارسي 🤖."],
-      "مرحبا":["👋 أهلا وسهلا بك! كيف يمكنني مساعدتك؟"],
-      "اهلا":["👋 أهلا وسهلا! كيف حالك؟"],
-      "السلام عليكم":["وعليكم السلام ورحمة الله وبركاته 🤲"],
-      "صباح الخير":["☀️ صباح النور والسرور!"],
-      "مساء الخير":["🌙 مساء الورد والياسمين."],
-      "كيف حالك":["😀 بخير والحمد لله، ماذا عنك؟"],
-      "ماهي قدراتك":["🤖 أستطيع الإجابة على أسئلة عامة."],
-      "متى تمت برمجتك":["⌛ تمت برمجتي من طرف المبتكر يوسف فارسي سنة 2022."],
-      "شكرا":["🙏 على الرحب والسعة!"],
-      "مع السلامة":["👋 إلى اللقاء، أراك لاحقا!"],
-      
-      // صيغ الأسئلة المتعلقة بيوسف فارسي
-      "يوسف فارسي":["هو يوسف فارسي من مواليد الشريعة ولاية تبسة خبير في عدة مجالات."],
-      "من هو يوسف":["هو يوسف فارسي من مواليد الشريعة ولاية تبسة خبير في عدة مجالات."],
-      "معلومات عن يوسف":["هو يوسف فارسي من مواليد الشريعة ولاية تبسة خبير في عدة مجالات."],
-      
-      // صيغ الأسئلة عن تاريخ الميلاد
-      "تاريخ الميلاد":["10 نوفمبر 1988 يوم الخميس على الساعة الثامنة صباحا."],
-      "متى ولد يوسف":["10 نوفمبر 1988 يوم الخميس على الساعة الثامنة صباحا."],
-      "تاريخ ميلاده":["10 نوفمبر 1988 يوم الخميس على الساعة الثامنة صباحا."],
-      "مولد يوسف":["10 نوفمبر 1988 يوم الخميس على الساعة الثامنة صباحا."],
-      
-      // صيغ الأسئلة عن الوالدين والأب
-      "ابن من":["هو ابن بلقاسم وأمه تونسي فاطمة."],
-      "من ابوه":["هو ابن بلقاسم وأمه تونسي فاطمة."],
-      "من هو والده":["هو ابن بلقاسم وأمه تونسي فاطمة."],
-      "اسم والده":["هو ابن بلقاسم وأمه تونسي فاطمة."],
-      "من امه":["أمه هي تونسي فاطمة وهو ابن بلقاسم."],
-      
-      // صيغ الأسئلة عن السكن والإقامة
-      "اين يسكن":["الشريعة ولاية تبسة دولة الجزائر."],
-      "اين يعيش":["الشريعة ولاية تبسة دولة الجزائر."],
-      "مكان اقامته":["الشريعة ولاية تبسة دولة الجزائر."],
-      "اين يقطن":["الشريعة ولاية تبسة دولة الجزائر."],
-      
-      // صيغ الأسئلة عن الذكاء
-      "هل هو ذكي":["نعم يوسف ذكي جدا بل هو عبقري."],
-      "هل يوسف ذكي":["نعم يوسف ذكي جدا بل هو عبقري."],
-      "ذكاء يوسف":["نعم يوسف ذكي جدا بل هو عبقري."],
-      
-      // صيغ الأسئلة عن الصانع والمبرمج
-      "من صنعك":["صنعني المبتكر يوسف فارسي."],
-      "من برمجك":["صنعني المبتكر يوسف فارسي."],
-      "من طورك":["صنعني المبتكر يوسف فارسي."]
-    };
+<script>
+const SYSTEM_PROMPT = `أنت يوسف، مساعد ذكاء اصطناعي ودود وذكي يتحدث العربية بطلاقة.
+شخصيتك: دافئ، متحمس، مفيد، ظريف أحياناً.
+تجيب بشكل واضح ومنظم. تستخدم الإيموجي بشكل معتدل.
+اسمك يوسف فقط. ردودك دائماً بالعربية إلا إذا طُلب غير ذلك.`;
 
-    let memory=[]; let askedQuestions={}; let fallbackCount=0;
+const GROQ_KEY = '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';
+let history = [];
+let isLoading = false;
 
-    function copyToClipboard(text){navigator.clipboard.writeText(text).then(()=>showToast());}
-    function showToast(){const toast=document.getElementById("toast");toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),2000);}
-    function typeMessage(text,sender){
-      const div=document.createElement("div"); div.className="msg "+sender;
-      if(sender==="bot"){const span=document.createElement("span"); div.appendChild(span);
-        const copyBtn=document.createElement("button"); copyBtn.className="copy-btn"; copyBtn.textContent="📋";
-        copyBtn.onclick=()=>copyToClipboard(span.textContent); div.appendChild(copyBtn); messagesDiv.appendChild(div);
-        messagesDiv.scrollTop=messagesDiv.scrollHeight; let i=0;
-        function typing(){if(i<text.length){span.textContent+=text.charAt(i);i++;messagesDiv.scrollTop=messagesDiv.scrollHeight;setTimeout(typing,35);}}
-        typing();
-      } else {messagesDiv.appendChild(div); messagesDiv.scrollTop=messagesDiv.scrollHeight; let i=0;
-        function typing(){if(i<text.length){div.textContent+=text.charAt(i);i++;messagesDiv.scrollTop=messagesDiv.scrollHeight;setTimeout(typing,35);}}typing();}
-    }
-    function addMessage(text,sender){typeMessage(text,sender);}
-    function clearChat(){messagesDiv.innerHTML="";memory=[];askedQuestions={};fallbackCount=0;addMessage("🧹 تم مسح المحادثة. مرحبا من جديد 👋","bot");}
+function getTime() {
+  return new Date().toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' });
+}
 
-    function cleanQuestion(raw){
-      if(!raw) return "";
-      let text=raw.replace(/[؟?!.,؛:"]/g," ");
-      const stopWords=["من","ما","ماذا","أين","متى","كيف","هل","هو","هي","عن","ماهي","ماهو","ماهية","لمتى","عرف","تعريف","مفهوم","توثيح"];
-      let words=text.split(/\s+/).filter(w=>w.trim().length>0&&!stopWords.includes(w.trim()));
-      return words.join(" ").trim();
-    }
+function addMessage(role, text) {
+  const welcome = document.getElementById('welcome');
+  if (welcome) welcome.remove();
+  const messages = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = `message ${role}`;
+  const isUser = role === 'user';
+  div.innerHTML = `
+    <div class="msg-avatar">${isUser ? '👤' : '🤖'}</div>
+    <div class="msg-content">
+      <div class="msg-name">${isUser ? 'أنت' : 'يوسف'}</div>
+      <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+      <div class="msg-time">${getTime()}</div>
+    </div>
+  `;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
 
-    function checkKnowledgeBase(userMsg){
-      if(!userMsg) return null;
-      const lower=userMsg.toLowerCase().trim();
-      for(let key in knowledgeBase){
-        if(lower.includes(key)){
-          const answers=knowledgeBase[key];
-          return answers[Math.floor(Math.random()*answers.length)]+" 🔴";
-        }
-      }
-      return null;
-    }
+function showTyping() {
+  const messages = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'message ai';
+  div.id = 'typing';
+  div.innerHTML = `
+    <div class="msg-avatar">🤖</div>
+    <div class="msg-content">
+      <div class="msg-name">يوسف</div>
+      <div class="msg-bubble">
+        <div class="typing-bubble">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    </div>
+  `;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
 
-    async function searchWikipedia(query){
-      if(!query) return null;
-      try{
-        const url=`https://ar.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
-        const res=await fetch(url); if(!res.ok) return null;
-        const data=await res.json(); if(data.extract) return data.extract+" 🔵";
-      }catch(e){return null;} return null;
-    }
+function removeTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
 
-    async function searchWikidata(query){
-      if(!query) return null;
-      try{
-        const searchUrl=`https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(query)}&language=ar&format=json&origin=*`;
-        const searchRes=await fetch(searchUrl); const searchData=await searchRes.json();
-        if(!searchData.search||searchData.search.length===0) return null;
-        const qid=searchData.search[0].id;
-        const entityUrl=`https://www.wikidata.org/wiki/Special:EntityData/${qid}.json`;
-        const entityRes=await fetch(entityUrl); const entityData=await entityRes.json();
-        const entity=entityData.entities[qid];
-        if(entity && entity.descriptions && entity.descriptions.ar){
-          return entity.descriptions.ar.value+" 🟡";
-        }
-      }catch(e){return null;} return null;
-    }
+function suggest(text) {
+  document.getElementById('userInput').value = text;
+  sendMessage();
+}
 
-    async function searchArabicEncyclopedia(query){
-      if(!query) return null;
-      try{
-        const res=await fetch(`https://arab-ency.com/api/search?q=${encodeURIComponent(query)}`);
-        if(res.ok){const data=await res.json();
-          if(data && data.length>0) return (data[0].summary||data[0].title)+" 🟢";}
-      }catch(e){return null;} return null;
-    }
+async function sendMessage() {
+  if (isLoading) return;
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
 
-    async function sendMessage(){
-      const text=input.value.trim(); if(!text) return;
-      addMessage(text,"user"); input.value="";
-      memory.push({role:"user",content:text});
-      if(memory.length>6) memory.splice(0,memory.length-6);
+  input.value = '';
+  input.style.height = 'auto';
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
 
-      let kbAnswer=checkKnowledgeBase(text);
-      if(!kbAnswer){const cleaned=cleanQuestion(text); kbAnswer=checkKnowledgeBase(cleaned);}
-      if(kbAnswer){addMessage(kbAnswer,"bot"); memory.push({role:"assistant",content:kbAnswer}); return;}
+  addMessage('user', text);
+  history.push({ role: 'user', content: text });
+  showTyping();
 
-      const cleanedForSearch=cleanQuestion(text);
-      if(!askedQuestions[cleanedForSearch]) askedQuestions[cleanedForSearch]=1;
-      else askedQuestions[cleanedForSearch]++;
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        max_tokens: 1024,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          ...history
+        ]
+      })
+    });
 
-      const count=askedQuestions[cleanedForSearch];
-      if(count===3){addMessage("🤖 إعادة نفس السؤال للمرة الثالثة يبدو أنك مريض نفسياً","bot");return;}
-      else if(count===4){addMessage("🤖 ايا روح تعطي تراميك","bot");return;}
+    const data = await response.json();
+    removeTyping();
+    const reply = data.choices?.[0]?.message?.content || 'عذراً، لم أتمكن من الرد.';
+    history.push({ role: 'assistant', content: reply });
+    addMessage('ai', reply);
 
-      addMessage("⏳ جاري البحث...","bot");
+  } catch (err) {
+    removeTyping();
+    addMessage('ai', 'خطأ في الاتصال: ' + err.message);
+  }
 
-      let answer=null;
-      if(count%3===1){
-        answer=await searchWikipedia(cleanedForSearch) || await searchWikidata(cleanedForSearch) || await searchArabicEncyclopedia(cleanedForSearch);
-      }else if(count%3===2){
-        answer=await searchWikidata(cleanedForSearch) || await searchWikipedia(cleanedForSearch) || await searchArabicEncyclopedia(cleanedForSearch);
-      }else{
-        answer=await searchArabicEncyclopedia(cleanedForSearch) || await searchWikipedia(cleanedForSearch) || await searchWikidata(cleanedForSearch);
-      }
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+  input.focus();
+}
 
-      if(!answer){
-        fallbackCount++;
-        if(fallbackCount===1){
-          answer="أنا يوسف فارسي الآلي مهمتي الإجابة عن الأسئلة الثقافية فقط  لا أزال في مرحلة التطوير";
-        }else if(fallbackCount===2){
-          answer="يمكنك أن تسأل بخصوص يوسف ماذا تريد أن تعرف عنه";
-        }else{
-          answer="يمكنك أن تطرح سؤال مثل من هو عمر بن الخطاب مثلا او ماهي الحياة او أي سؤال ثقافي ...";
-        }
-      }
-
-      const last=messagesDiv.lastChild;
-      if(last && last.classList.contains("bot") && last.textContent.includes("⏳")) last.remove();
-
-      addMessage(answer,"bot");
-      memory.push({role:"assistant",content:answer});
-      if(memory.length>6) memory.splice(0,memory.length-6);
-    }
-
-    window.onload=()=>{addMessage("👋 مرحبا! أنا يوسف فارسي روبوت ذكاء اصطناعي. تفضل بالسؤال.","bot");}
-    input.addEventListener("keydown",function(e){if(e.key==="Enter")sendMessage();});
-  </script>
+const input = document.getElementById('userInput');
+input.addEventListener('input', () => {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+});
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+</script>
 </body>
 </html>
