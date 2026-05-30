@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>يوسف فارسي — مساعدك المحلي</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
@@ -15,121 +15,95 @@
     --user-bg: linear-gradient(135deg, #008b8b, #00ccaa);
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   
   body {
     font-family: 'Tajawal', sans-serif;
     background: var(--bg);
     color: var(--text);
+    /* استخدام dvh لضمان التوافق مع شريط كروم على الهاتف */
     height: 100vh;
+    height: 100dvh; 
     display: flex;
     flex-direction: column;
     overflow: hidden;
   }
 
   header {
-    padding: 15px 20px;
+    padding: env(safe-area-inset-top) 15px 10px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: rgba(15, 18, 29, 0.9);
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(10px);
-    z-index: 1000;
+    flex-shrink: 0;
   }
 
   .bot-title {
     font-family: 'Cairo', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 900;
     color: var(--accent);
-    text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
   }
 
   .nav-btn {
-    background: transparent;
+    background: rgba(0, 204, 170, 0.1);
     border: 1px solid var(--border);
     color: var(--accent);
-    padding: 8px 12px;
+    padding: 6px 12px;
     border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.8rem;
-  }
-
-  #sidebar {
-    position: fixed;
-    top: 0; right: -280px;
-    width: 280px; height: 100%;
-    background: #04060b;
-    border-left: 1px solid var(--border);
-    transition: 0.3s ease;
-    z-index: 2000;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  #sidebar.open { right: 0; }
-
-  .history-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    color: var(--accent);
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 10px;
-  }
-
-  .history-list { overflow-y: auto; flex: 1; }
-  .history-card {
-    background: var(--surface);
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 0.75rem;
   }
 
   #messages {
     flex: 1;
     overflow-y: auto;
-    padding: 20px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
     background: radial-gradient(circle at center, #0f1425 0%, #05070a 100%);
+    /* تحسين السكرول على كروم موبايل */
+    -webkit-overflow-scrolling: touch;
   }
 
-  .message { display: flex; gap: 10px; max-width: 90%; animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
-  
+  .message { display: flex; gap: 10px; max-width: 85%; animation: fadeIn 0.3s ease; }
   .message.user { align-self: flex-start; }
   .message.ai { align-self: flex-end; }
 
   .msg-bubble {
-    padding: 12px 16px;
-    border-radius: 18px;
-    font-size: 0.95rem;
-    line-height: 1.6;
+    padding: 10px 14px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 
-  .message.user .msg-bubble { background: var(--user-bg); color: white; border-bottom-left-radius: 4px; }
-  .message.ai .msg-bubble { background: var(--surface); border: 1px solid var(--border); border-bottom-right-radius: 4px; }
+  .message.user .msg-bubble { background: var(--user-bg); color: white; border-bottom-left-radius: 2px; }
+  .message.ai .msg-bubble { background: var(--surface); border: 1px solid var(--border); border-bottom-right-radius: 2px; }
 
+  #status-bar {
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--accent);
+    text-align: center;
+    font-size: 0.7rem;
+    padding: 5px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  /* منطقة الإدخال المعدلة لتظهر فوق شريط المتصفح */
   #inputArea {
-    padding: 15px;
+    padding: 10px 15px calc(10px + env(safe-area-inset-bottom));
     background: var(--surface);
     border-top: 1px solid var(--border);
+    flex-shrink: 0;
   }
 
   .controls {
     display: flex;
-    gap: 10px;
-    max-width: 900px;
-    margin: 0 auto;
+    gap: 8px;
+    max-width: 100%;
     align-items: center;
   }
 
@@ -137,32 +111,53 @@
     flex: 1;
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 10px;
     color: white;
-    padding: 12px;
+    padding: 10px;
     outline: none;
     font-family: 'Tajawal', sans-serif;
+    font-size: 16px; /* منع التكبير التلقائي في آيفون/كروم */
     resize: none;
+    max-height: 80px;
   }
 
   .action-btn {
-    padding: 10px 15px;
+    padding: 10px 14px;
     border-radius: 10px;
     border: none;
-    cursor: pointer;
     font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   #sendBtn { background: var(--accent); color: #05070a; }
-  #clearBtn { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid #ff4d4d; }
+  #clearBtn { background: rgba(255, 77, 77, 0.15); color: #ff5555; border: 1px solid rgba(255, 85, 85, 0.3); }
 
-  #status-bar {
-    background: rgba(0, 255, 204, 0.05);
-    color: var(--accent);
-    text-align: center;
-    font-size: 0.75rem;
+  /* القائمة الجانبية */
+  #sidebar {
+    position: fixed;
+    top: 0; right: -100%;
+    width: 80%; max-width: 280px; height: 100%;
+    background: #04060b;
+    border-left: 1px solid var(--border);
+    transition: 0.3s ease;
+    z-index: 2000;
+    padding: 20px;
+  }
+  #sidebar.open { right: 0; }
+
+  .history-card {
+    background: var(--surface);
     padding: 8px;
-    border-top: 1px solid var(--border);
+    margin-bottom: 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .typing::after { content: '...'; animation: blink 1s infinite; }
@@ -177,27 +172,26 @@
 </header>
 
 <aside id="sidebar">
-  <div class="history-header">
+  <div style="display:flex; justify-content:space-between; color:var(--accent); margin-bottom:20px;">
     <span>السجل (أحدث 20)</span>
-    <button class="nav-btn" onclick="toggleSidebar()">إغلاق ✕</button>
+    <button onclick="toggleSidebar()" style="background:none; border:none; color:white; font-size:1.2rem;">✕</button>
   </div>
-  <div class="history-list" id="historyList"></div>
+  <div id="historyList"></div>
 </aside>
 
 <div id="messages"></div>
 
-<div id="status-bar" id="loadStatus">جاري فحص المتصفح...</div>
+<div id="status-bar">جاري فحص المتصفح...</div>
 
 <div id="inputArea">
   <div class="controls">
     <button id="clearBtn" class="action-btn" onclick="clearMessages()">حذف</button>
-    <textarea id="userInput" placeholder="انتظر تحميل الذكاء..." rows="1" disabled></textarea>
+    <textarea id="userInput" placeholder="انتظر التحميل..." rows="1" disabled></textarea>
     <button id="sendBtn" class="action-btn" onclick="sendMessage()" disabled>إرسال</button>
   </div>
 </div>
 
 <script type="module">
-// استدعاء مكتبة التشغيل المحلي من Hugging Face
 import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
 
 let generator;
@@ -206,25 +200,14 @@ const loadStatus = document.getElementById('status-bar');
 const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
 
-// معلومات المبرمج يوسف فارسي المخزنة محلياً
-const PERSON_DATA = `
-معلومات عن يوسف فارسي (المبرمج):
-- المولد: ولد في مدينة الشريعة، ولاية تبسة، الجزائر.
-- العائلة: والده بلقاسم (المدعو قاصة) ووالدته تونسى فاطمة.
-- الإخوة: لديه 6 إخوة ذكور وهو السابع، وأخت واحدة صغرى اسمها بسمة.
-- الخبرة: مبرمج تطبيقات ومطور ذكاء اصطناعي، وخبير في قطاع الدواجن.
-`;
+const PERSON_DATA = `يوسف فارسي من الشريعة، تبسة، الجزائر. والده بلقاسم (قاصة) ووالدته تونسى فاطمة. لديه 6 إخوة ذكور وهو السابع وأخت بسمة. هو مبرمج وخبير دواجن.`;
 
-// 1. تحميل النموذج مع إظهار نسبة التنزيل
 (async () => {
     try {
-        loadStatus.innerText = "بدء التنزيل... يرجى الانتظار (يحدث مرة واحدة فقط)";
-        
-        // استخدام نموذج صغير وفعال للعمل على الهواتف
         generator = await pipeline('text2text-generation', 'Xenova/LaMini-Flan-T5-77M', {
             progress_callback: (data) => {
                 if (data.status === 'progress') {
-                    loadStatus.innerText = `جاري تنزيل "عقل" الروبوت: ${data.progress.toFixed(2)}%`;
+                    loadStatus.innerText = `جاري التحميل: ${data.progress.toFixed(1)}%`;
                 } else if (data.status === 'ready') {
                     loadStatus.innerText = "● الذكاء الاصطناعي جاهز ويعمل محلياً 100%";
                     userInput.disabled = false;
@@ -233,10 +216,9 @@ const PERSON_DATA = `
                 }
             }
         });
-        
         showWelcome();
     } catch (e) {
-        loadStatus.innerText = "خطأ: تأكد من استخدام متصفح حديث واتصال بالإنترنت للتحميل الأول.";
+        loadStatus.innerText = "خطأ في التحميل. يرجى تحديث الصفحة.";
     }
 })();
 
@@ -248,24 +230,17 @@ window.sendMessage = async () => {
     userInput.value = '';
     updateSidebar(text);
 
-    const aiDiv = addMessage('ai', 'جاري التفكير محلياً...');
+    const aiDiv = addMessage('ai', 'جاري التفكير...');
     const bubble = aiDiv.querySelector('.msg-bubble');
     bubble.classList.add('typing');
 
     try {
-        // دمج تعليمات المبرمج مع سؤال المستخدم
-        const fullPrompt = `${PERSON_DATA}\nسؤال المستخدم: ${text}\nأجب باختصار وعلى قدر السؤال فقط:`;
-        
-        const output = await generator(fullPrompt, { 
-            max_new_tokens: 150, 
-            temperature: 0.5,
-            repetition_penalty: 1.2
-        });
-        
+        const fullPrompt = `${PERSON_DATA}\nسؤال: ${text}\nإجابة مختصرة:`;
+        const output = await generator(fullPrompt, { max_new_tokens: 100, temperature: 0.5 });
         bubble.classList.remove('typing');
         typeWriter(bubble, output[0].generated_text);
     } catch (err) {
-        bubble.innerText = "عذراً، حدث خطأ في المعالجة المحلية.";
+        bubble.innerText = "خطأ محلي.";
     }
 };
 
@@ -298,8 +273,7 @@ function typeWriter(element, text) {
 
 function updateSidebar(text) {
     const list = document.getElementById('historyList');
-    const items = list.getElementsByClassName('history-card');
-    if (items.length >= LIMIT) { list.removeChild(items[items.length - 1]); }
+    if (list.children.length >= LIMIT) list.removeChild(list.lastChild);
     const card = document.createElement('div');
     card.className = 'history-card';
     card.innerText = text;
@@ -309,8 +283,9 @@ function updateSidebar(text) {
 window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('open');
 window.clearMessages = () => { document.getElementById('messages').innerHTML = ''; showWelcome(); };
 
-userInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+userInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
 });
 </script>
 </body>
