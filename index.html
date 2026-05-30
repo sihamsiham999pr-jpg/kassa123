@@ -2,24 +2,21 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>يوسف — مساعدك الذكي</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>يوسف فارسي — مساعدك المحلي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0c0f1a;
-    --surface: #141827;
-    --surface2: #1c2235;
-    --border: rgba(99,179,255,0.12);
-    --accent: #4f9eff;
-    --accent2: #7c3aed;
+    --bg: #05070a;
+    --surface: #0f121d;
+    --border: rgba(0, 255, 204, 0.3);
+    --accent: #00ccaa; 
     --text: #e8edf5;
-    --text-muted: #7a8aa0;
-    --user-bg: linear-gradient(135deg, #4f9eff, #7c3aed);
-    --ai-bg: #1c2235;
-    --green: #10b981;
+    --user-bg: linear-gradient(135deg, #008b8b, #00ccaa);
   }
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  
   body {
     font-family: 'Tajawal', sans-serif;
     background: var(--bg);
@@ -29,342 +26,291 @@
     flex-direction: column;
     overflow: hidden;
   }
+
   header {
+    padding: 15px 20px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 14px;
-    padding: 16px 24px;
-    background: rgba(20,24,39,0.95);
+    background: rgba(15, 18, 29, 0.9);
     border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(20px);
-    z-index: 10;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
   }
-  .avatar {
-    width: 46px; height: 46px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #4f9eff, #7c3aed);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem;
-    box-shadow: 0 0 20px rgba(79,158,255,0.4);
-    flex-shrink: 0;
-    position: relative;
-  }
-  .avatar::after {
-    content: '';
-    position: absolute;
-    bottom: 2px; left: 2px;
-    width: 10px; height: 10px;
-    background: var(--green);
-    border-radius: 50%;
-    border: 2px solid var(--bg);
-    box-shadow: 0 0 8px var(--green);
-  }
-  .header-info h1 {
+
+  .bot-title {
     font-family: 'Cairo', sans-serif;
-    font-size: 1.2rem; font-weight: 700;
-    background: linear-gradient(135deg, #e8edf5, #4f9eff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .header-info p { font-size: 0.75rem; color: var(--green); font-weight: 500; }
-  .header-badge {
-    margin-right: auto;
-    padding: 4px 12px;
-    background: rgba(79,158,255,0.1);
-    border: 1px solid rgba(79,158,255,0.2);
-    border-radius: 20px;
-    font-size: 0.7rem;
+    font-size: 1.5rem;
+    font-weight: 900;
     color: var(--accent);
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
   }
+
+  .nav-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--accent);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+
+  #sidebar {
+    position: fixed;
+    top: 0; right: -280px;
+    width: 280px; height: 100%;
+    background: #04060b;
+    border-left: 1px solid var(--border);
+    transition: 0.3s ease;
+    z-index: 2000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar.open { right: 0; }
+
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+
+  .history-list { overflow-y: auto; flex: 1; }
+  .history-card {
+    background: var(--surface);
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   #messages {
     flex: 1;
     overflow-y: auto;
-    padding: 24px 20px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 15px;
+    background: radial-gradient(circle at center, #0f1425 0%, #05070a 100%);
   }
-  #messages::-webkit-scrollbar { width: 4px; }
-  #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-  .message {
+
+  .message { display: flex; gap: 10px; max-width: 90%; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+  
+  .message.user { align-self: flex-start; }
+  .message.ai { align-self: flex-end; }
+
+  .msg-bubble {
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .message.user .msg-bubble { background: var(--user-bg); color: white; border-bottom-left-radius: 4px; }
+  .message.ai .msg-bubble { background: var(--surface); border: 1px solid var(--border); border-bottom-right-radius: 4px; }
+
+  #inputArea {
+    padding: 15px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .controls {
     display: flex;
     gap: 10px;
-    animation: msgIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
-    max-width: 85%;
+    max-width: 900px;
+    margin: 0 auto;
+    align-items: center;
   }
-  @keyframes msgIn {
-    from { opacity: 0; transform: translateY(12px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .message.user { align-self: flex-start; flex-direction: row-reverse; }
-  .message.ai { align-self: flex-end; }
-  .msg-avatar {
-    width: 34px; height: 34px; border-radius: 50%;
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.9rem; margin-top: 2px;
-  }
-  .message.user .msg-avatar { background: linear-gradient(135deg, #4f9eff, #7c3aed); }
-  .message.ai .msg-avatar { background: linear-gradient(135deg, #7c3aed, #4f9eff); }
-  .msg-content { display: flex; flex-direction: column; gap: 4px; }
-  .msg-name { font-size: 0.72rem; color: var(--text-muted); padding: 0 4px; }
-  .message.user .msg-name { text-align: right; }
-  .msg-bubble {
-    padding: 12px 16px; border-radius: 18px;
-    font-size: 0.95rem; line-height: 1.7;
-    word-break: break-word;
-  }
-  .message.user .msg-bubble {
-    background: var(--user-bg); color: white;
-    border-radius: 18px 4px 18px 18px;
-    box-shadow: 0 4px 20px rgba(79,158,255,0.25);
-  }
-  .message.ai .msg-bubble {
-    background: var(--ai-bg); color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 4px 18px 18px 18px;
-  }
-  .msg-time { font-size: 0.65rem; color: var(--text-muted); padding: 0 4px; }
-  .message.user .msg-time { text-align: right; }
-  .typing-bubble { display: flex; align-items: center; gap: 6px; padding: 14px 18px; }
-  .typing-dot {
-    width: 7px; height: 7px;
-    background: var(--accent); border-radius: 50%;
-    animation: typingBounce 1.2s infinite;
-  }
-  .typing-dot:nth-child(2) { animation-delay: 0.2s; background: #9b7fff; }
-  .typing-dot:nth-child(3) { animation-delay: 0.4s; background: var(--accent2); }
-  @keyframes typingBounce {
-    0%,60%,100% { transform: translateY(0); opacity: 0.5; }
-    30% { transform: translateY(-6px); opacity: 1; }
-  }
-  .welcome { text-align: center; padding: 40px 20px; animation: fadeIn 0.6s ease both; }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .welcome-avatar {
-    width: 80px; height: 80px; border-radius: 50%;
-    background: linear-gradient(135deg, #4f9eff, #7c3aed);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.2rem; margin: 0 auto 16px;
-    box-shadow: 0 0 40px rgba(79,158,255,0.4);
-    animation: pulse 3s ease infinite;
-  }
-  @keyframes pulse {
-    0%,100% { box-shadow: 0 0 40px rgba(79,158,255,0.4); }
-    50% { box-shadow: 0 0 60px rgba(79,158,255,0.6); }
-  }
-  .welcome h2 {
-    font-family: 'Cairo', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;
-    background: linear-gradient(135deg, #e8edf5, #4f9eff);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-  .welcome p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; max-width: 300px; margin: 0 auto 24px; }
-  .suggestions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 360px; margin: 0 auto; }
-  .suggestion-btn {
-    padding: 8px 14px; background: var(--surface2);
-    border: 1px solid var(--border); border-radius: 20px;
-    color: var(--text-muted); font-family: 'Tajawal', sans-serif;
-    font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
-  }
-  .suggestion-btn:hover {
-    background: rgba(79,158,255,0.1);
-    border-color: rgba(79,158,255,0.3);
-    color: var(--accent); transform: translateY(-2px);
-  }
-  #inputArea {
-    padding: 16px 20px;
-    background: rgba(20,24,39,0.95);
-    border-top: 1px solid var(--border);
-    backdrop-filter: blur(20px);
-  }
-  .input-wrapper {
-    display: flex; align-items: flex-end; gap: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 24px; padding: 10px 10px 10px 16px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .input-wrapper:focus-within {
-    border-color: rgba(79,158,255,0.4);
-    box-shadow: 0 0 20px rgba(79,158,255,0.1);
-  }
+
   #userInput {
-    flex: 1; background: transparent; border: none; outline: none;
-    color: var(--text); font-family: 'Tajawal', sans-serif;
-    font-size: 0.95rem; resize: none; max-height: 120px; line-height: 1.5;
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: white;
+    padding: 12px;
+    outline: none;
+    font-family: 'Tajawal', sans-serif;
+    resize: none;
   }
-  #userInput::placeholder { color: var(--text-muted); }
-  #sendBtn {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: linear-gradient(135deg, #4f9eff, #7c3aed);
-    border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1rem; color: white; flex-shrink: 0;
-    transition: all 0.2s; box-shadow: 0 4px 15px rgba(79,158,255,0.3);
+
+  .action-btn {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
   }
-  #sendBtn:hover { transform: scale(1.08); }
-  #sendBtn:active { transform: scale(0.95); }
-  #sendBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-  .input-hint { text-align: center; font-size: 0.68rem; color: var(--text-muted); margin-top: 8px; }
+
+  #sendBtn { background: var(--accent); color: #05070a; }
+  #clearBtn { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid #ff4d4d; }
+
+  #status-bar {
+    background: rgba(0, 255, 204, 0.05);
+    color: var(--accent);
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .typing::after { content: '...'; animation: blink 1s infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="avatar">🤖</div>
-  <div class="header-info">
-    <h1>يوسف</h1>
-    <p>● متصل الآن</p>
-  </div>
-  <div class="header-badge">ذكاء اصطناعي</div>
+  <div class="bot-title">يوسف فارسي</div>
+  <button class="nav-btn" onclick="toggleSidebar()">المحادثات السابقة 📜</button>
 </header>
 
-<div id="messages">
-  <div class="welcome" id="welcome">
-    <div class="welcome-avatar">🤖</div>
-    <h2>مرحباً، أنا يوسف!</h2>
-    <p>مساعدك الذكي الشخصي. اسألني أي شيء وسأكون سعيداً بمساعدتك.</p>
-    <div class="suggestions">
-      <button class="suggestion-btn" onclick="suggest('من أنت؟')">من أنت؟</button>
-      <button class="suggestion-btn" onclick="suggest('ساعدني في كتابة رسالة')">كتابة رسالة ✍️</button>
-      <button class="suggestion-btn" onclick="suggest('اشرح لي الذكاء الاصطناعي ببساطة')">اشرح الذكاء الاصطناعي 🧠</button>
-      <button class="suggestion-btn" onclick="suggest('احكِ لي نكتة')">نكتة 😄</button>
-      <button class="suggestion-btn" onclick="suggest('ما هي نصائحك لتعلم البرمجة؟')">تعلم البرمجة 💻</button>
-    </div>
+<aside id="sidebar">
+  <div class="history-header">
+    <span>السجل (أحدث 20)</span>
+    <button class="nav-btn" onclick="toggleSidebar()">إغلاق ✕</button>
   </div>
-</div>
+  <div class="history-list" id="historyList"></div>
+</aside>
+
+<div id="messages"></div>
+
+<div id="status-bar" id="loadStatus">جاري فحص المتصفح...</div>
 
 <div id="inputArea">
-  <div class="input-wrapper">
-    <textarea id="userInput" placeholder="اكتب رسالتك ليوسف..." rows="1"></textarea>
-    <button id="sendBtn" onclick="sendMessage()">➤</button>
+  <div class="controls">
+    <button id="clearBtn" class="action-btn" onclick="clearMessages()">حذف</button>
+    <textarea id="userInput" placeholder="انتظر تحميل الذكاء..." rows="1" disabled></textarea>
+    <button id="sendBtn" class="action-btn" onclick="sendMessage()" disabled>إرسال</button>
   </div>
-  <div class="input-hint">اضغط Enter للإرسال • Shift+Enter لسطر جديد</div>
 </div>
 
-<script>
-const SYSTEM_PROMPT = `أنت يوسف، مساعد ذكاء اصطناعي ودود وذكي يتحدث العربية بطلاقة.
-شخصيتك: دافئ، متحمس، مفيد، ظريف أحياناً.
-تجيب بشكل واضح ومنظم. تستخدم الإيموجي بشكل معتدل.
-اسمك يوسف فقط. ردودك دائماً بالعربية إلا إذا طُلب غير ذلك.`;
+<script type="module">
+// استدعاء مكتبة التشغيل المحلي من Hugging Face
+import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1';
 
-const GROQ_KEY = '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';
-let history = [];
-let isLoading = false;
+let generator;
+const LIMIT = 20;
+const loadStatus = document.getElementById('status-bar');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
 
-function getTime() {
-  return new Date().toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' });
+// معلومات المبرمج يوسف فارسي المخزنة محلياً
+const PERSON_DATA = `
+معلومات عن يوسف فارسي (المبرمج):
+- المولد: ولد في مدينة الشريعة، ولاية تبسة، الجزائر.
+- العائلة: والده بلقاسم (المدعو قاصة) ووالدته تونسى فاطمة.
+- الإخوة: لديه 6 إخوة ذكور وهو السابع، وأخت واحدة صغرى اسمها بسمة.
+- الخبرة: مبرمج تطبيقات ومطور ذكاء اصطناعي، وخبير في قطاع الدواجن.
+`;
+
+// 1. تحميل النموذج مع إظهار نسبة التنزيل
+(async () => {
+    try {
+        loadStatus.innerText = "بدء التنزيل... يرجى الانتظار (يحدث مرة واحدة فقط)";
+        
+        // استخدام نموذج صغير وفعال للعمل على الهواتف
+        generator = await pipeline('text2text-generation', 'Xenova/LaMini-Flan-T5-77M', {
+            progress_callback: (data) => {
+                if (data.status === 'progress') {
+                    loadStatus.innerText = `جاري تنزيل "عقل" الروبوت: ${data.progress.toFixed(2)}%`;
+                } else if (data.status === 'ready') {
+                    loadStatus.innerText = "● الذكاء الاصطناعي جاهز ويعمل محلياً 100%";
+                    userInput.disabled = false;
+                    userInput.placeholder = "تفضل بالسؤال...";
+                    sendBtn.disabled = false;
+                }
+            }
+        });
+        
+        showWelcome();
+    } catch (e) {
+        loadStatus.innerText = "خطأ: تأكد من استخدام متصفح حديث واتصال بالإنترنت للتحميل الأول.";
+    }
+})();
+
+window.sendMessage = async () => {
+    const text = userInput.value.trim();
+    if (!text || !generator) return;
+
+    addMessage('user', text);
+    userInput.value = '';
+    updateSidebar(text);
+
+    const aiDiv = addMessage('ai', 'جاري التفكير محلياً...');
+    const bubble = aiDiv.querySelector('.msg-bubble');
+    bubble.classList.add('typing');
+
+    try {
+        // دمج تعليمات المبرمج مع سؤال المستخدم
+        const fullPrompt = `${PERSON_DATA}\nسؤال المستخدم: ${text}\nأجب باختصار وعلى قدر السؤال فقط:`;
+        
+        const output = await generator(fullPrompt, { 
+            max_new_tokens: 150, 
+            temperature: 0.5,
+            repetition_penalty: 1.2
+        });
+        
+        bubble.classList.remove('typing');
+        typeWriter(bubble, output[0].generated_text);
+    } catch (err) {
+        bubble.innerText = "عذراً، حدث خطأ في المعالجة المحلية.";
+    }
+};
+
+function showWelcome() {
+    const aiDiv = addMessage('ai', '');
+    typeWriter(aiDiv.querySelector('.msg-bubble'), "مرحبا أنا يوسف فارسي هنا لمساعدتك تفضل بالسؤال");
 }
 
 function addMessage(role, text) {
-  const welcome = document.getElementById('welcome');
-  if (welcome) welcome.remove();
-  const messages = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = `message ${role}`;
-  const isUser = role === 'user';
-  div.innerHTML = `
-    <div class="msg-avatar">${isUser ? '👤' : '🤖'}</div>
-    <div class="msg-content">
-      <div class="msg-name">${isUser ? 'أنت' : 'يوسف'}</div>
-      <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
-      <div class="msg-time">${getTime()}</div>
-    </div>
-  `;
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
+    const container = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `message ${role}`;
+    div.innerHTML = `<div class="msg-bubble">${text}</div>`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+    return div;
 }
 
-function showTyping() {
-  const messages = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'message ai';
-  div.id = 'typing';
-  div.innerHTML = `
-    <div class="msg-avatar">🤖</div>
-    <div class="msg-content">
-      <div class="msg-name">يوسف</div>
-      <div class="msg-bubble">
-        <div class="typing-bubble">
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-        </div>
-      </div>
-    </div>
-  `;
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
+function typeWriter(element, text) {
+    let i = 0; element.innerHTML = "";
+    function type() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i); i++;
+            setTimeout(type, 20);
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+        }
+    }
+    type();
 }
 
-function removeTyping() {
-  const t = document.getElementById('typing');
-  if (t) t.remove();
+function updateSidebar(text) {
+    const list = document.getElementById('historyList');
+    const items = list.getElementsByClassName('history-card');
+    if (items.length >= LIMIT) { list.removeChild(items[items.length - 1]); }
+    const card = document.createElement('div');
+    card.className = 'history-card';
+    card.innerText = text;
+    list.prepend(card);
 }
 
-function suggest(text) {
-  document.getElementById('userInput').value = text;
-  sendMessage();
-}
+window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('open');
+window.clearMessages = () => { document.getElementById('messages').innerHTML = ''; showWelcome(); };
 
-async function sendMessage() {
-  if (isLoading) return;
-  const input = document.getElementById('userInput');
-  const text = input.value.trim();
-  if (!text) return;
-
-  input.value = '';
-  input.style.height = 'auto';
-  isLoading = true;
-  document.getElementById('sendBtn').disabled = true;
-
-  addMessage('user', text);
-  history.push({ role: 'user', content: text });
-  showTyping();
-
-  try {
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${GROQ_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        max_tokens: 1024,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...history
-        ]
-      })
-    });
-
-    const data = await response.json();
-    removeTyping();
-    const reply = data.choices?.[0]?.message?.content || 'عذراً، لم أتمكن من الرد.';
-    history.push({ role: 'assistant', content: reply });
-    addMessage('ai', reply);
-
-  } catch (err) {
-    removeTyping();
-    addMessage('ai', 'خطأ في الاتصال: ' + err.message);
-  }
-
-  isLoading = false;
-  document.getElementById('sendBtn').disabled = false;
-  input.focus();
-}
-
-const input = document.getElementById('userInput');
-input.addEventListener('input', () => {
-  input.style.height = 'auto';
-  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
-});
-input.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+userInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
 </script>
 </body>
