@@ -9,10 +9,10 @@
   :root {
     --bg: #05070a;
     --surface: #0f121d;
-    --border: rgba(0, 255, 204, 0.3);
     --accent: #00ccaa; 
     --text: #e8edf5;
     --user-bg: linear-gradient(135deg, #008b8b, #00ccaa);
+    --border: rgba(0, 255, 204, 0.3);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -21,130 +21,131 @@
     font-family: 'Tajawal', sans-serif;
     background: var(--bg);
     color: var(--text);
-    height: 100vh;
     height: 100dvh;
-    overflow: hidden;
-    position: relative;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   header {
     height: 60px;
-    padding: 0 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #0f121d;
-    border-bottom: 1px solid var(--border);
-    z-index: 1000;
+    padding: 0 15px;
     flex-shrink: 0;
+    z-index: 1001;
   }
 
-  .bot-title { font-family: 'Cairo', sans-serif; font-size: 1.2rem; font-weight: 900; color: var(--accent); }
+  .bot-title { font-family: 'Cairo', sans-serif; font-size: 1.1rem; color: var(--accent); }
+
+  #sidebar {
+    position: fixed;
+    top: 0; right: -280px;
+    width: 280px; height: 100%;
+    background: #080a12;
+    border-left: 1px solid var(--border);
+    transition: 0.3s ease;
+    z-index: 2000;
+    padding: 20px;
+  }
+  #sidebar.active { right: 0; }
+  .history-item {
+    background: var(--surface);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   #messages {
     flex-grow: 1;
     overflow-y: auto;
     padding: 15px;
-    padding-bottom: 100px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
     background: radial-gradient(circle at center, #0f1425 0%, #05070a 100%);
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
+    padding-bottom: 110px;
   }
 
   #inputArea {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    bottom: 0; width: 100%;
     background: var(--surface);
     border-top: 2px solid var(--accent);
     padding: 10px;
     padding-bottom: calc(10px + env(safe-area-inset-bottom));
-    z-index: 2000;
+    z-index: 1000;
   }
 
-  .controls { display: flex; gap: 8px; width: 100%; align-items: center; max-width: 800px; margin: auto; }
+  .controls { display: flex; gap: 8px; align-items: center; max-width: 800px; margin: auto; }
 
   #userInput {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: white;
-    padding: 10px;
-    height: 45px;
-    outline: none;
-    font-size: 16px;
-    resize: none;
+    flex: 1; height: 45px; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; color: white; padding: 10px; font-size: 16px; outline: none; resize: none;
   }
 
-  .action-btn {
-    height: 45px;
-    padding: 0 15px;
-    border-radius: 8px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
+  .btn { height: 40px; padding: 0 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-family: inherit; }
   #sendBtn { background: var(--accent); color: #05070a; }
-  #clearBtn { background: #ff4d4d22; color: #ff4d4d; border: 1px solid #ff4d4d; }
+  
+  .copy-btn {
+    background: rgba(0, 204, 170, 0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-top: 5px;
+    align-self: flex-end;
+    cursor: pointer;
+  }
 
   .msg-bubble { 
-    padding: 10px 15px; 
-    border-radius: 15px; 
-    font-size: 0.95rem; 
-    line-height: 1.6; 
-    max-width: 85%; 
-    word-wrap: break-word;
-    white-space: pre-wrap; /* يحافظ على تنسيق الأسطر */
-    display: inline-block;
+    padding: 12px 16px; border-radius: 15px; font-size: 0.95rem; max-width: 85%; line-height: 1.5;
+    white-space: pre-wrap; word-break: break-word;
   }
-  .message.user { align-self: flex-start; }
-  .message.user .msg-bubble { background: var(--user-bg); color: white; border-bottom-left-radius: 2px; }
-  .message.ai { align-self: flex-end; }
-  .message.ai .msg-bubble { 
-    background: #1a1e2e; 
-    border: 1px solid var(--border); 
-    border-bottom-right-radius: 2px;
-    text-align: right;
-  }
-
-  .typing-cursor::after {
-    content: '█';
-    margin-right: 2px;
-    font-size: 0.8rem;
-    color: var(--accent);
-    animation: blink 0.8s steps(2, start) infinite;
-  }
-  @keyframes blink { to { visibility: hidden; } }
+  .message { display: flex; flex-direction: column; }
+  .message.user { align-items: flex-start; }
+  .message.user .msg-bubble { background: var(--user-bg); color: white; }
+  .message.ai { align-items: flex-end; }
+  .message.ai .msg-bubble { background: #1a1e2e; border: 1px solid var(--border); color: var(--text); }
 </style>
 </head>
 <body>
 
 <header>
   <div class="bot-title">يوسف فارسي</div>
-  <button style="background:none; border:1px solid var(--border); color:var(--accent); padding:5px 10px; border-radius:5px;" onclick="document.getElementById('messages').innerHTML=''">مسح 🗑️</button>
+  <button style="background:transparent; border:1px solid var(--accent); color:var(--accent);" class="btn" onclick="toggleSidebar()">السجل 📜</button>
 </header>
+
+<aside id="sidebar">
+  <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+    <h3 style="color:var(--accent)">المحادثات</h3>
+    <button class="btn" style="background:none; color:white;" onclick="toggleSidebar()">✕</button>
+  </div>
+  <div id="historyList"></div>
+</aside>
 
 <div id="messages"></div>
 
 <div id="inputArea">
   <div class="controls">
-    <button id="clearBtn" class="action-btn" onclick="location.reload()">إعادة</button>
-    <textarea id="userInput" placeholder="اسأل عن يوسف فارسي..." rows="1"></textarea>
-    <button id="sendBtn" class="action-btn" onclick="sendMessage()">إرسال</button>
+    <button class="btn" style="background:#ff4d4d22; color:#ff4d4d;" onclick="location.reload()">جديد</button>
+    <textarea id="userInput" placeholder="اسأل عن يوسف فارسي..."></textarea>
+    <button id="sendBtn" class="btn" onclick="sendMessage()">إرسال</button>
   </div>
 </div>
 
 <script>
-const SYSTEM_PROMPT = `أنت "روبوت يوسف فارسي". مبرمجك هو يوسف فارسي.
+const SYSTEM_PROMPT = `أنت "روبوت يوسف فارسي". مبرمجك هو يوسف فارسي. 
 معلومات المبرمج يوسف فارسي (أجب عنها فقط إذا سُئلت عن كل نقطة بحد ذاتها):
 - المولد: 10 نوفمبر 1988 في الشريعة، ولاية تبسة.
 - السكن: بلدية الشريعة، ولاية تبسة، حي هنشير عجلة.
@@ -154,54 +155,55 @@ const SYSTEM_PROMPT = `أنت "روبوت يوسف فارسي". مبرمجك ه�
 تعليمات: لا تقدم كل المعلومات دفعة واحدة. أجب حرفياً على قدر السؤال فقط.`;
 
 const GROQ_KEY = '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';
-let chatHistory = [];
+
+let allChats = JSON.parse(localStorage.getItem('farsi_chats') || '[]');
+let currentChat = [];
 
 window.onload = () => {
-    addMessage('ai', "مرحبا أنا يوسف فارسي، كيف يمكنني مساعدتك اليوم؟");
+    addMessage('ai', "مرحبا أنا يوسف فارسي، تفضل بسؤالك.");
+    updateSidebarUI();
 };
 
-function addMessage(role, text) {
+function addMessage(role, text, isHistory = false) {
   const container = document.getElementById('messages');
   const div = document.createElement('div');
   div.className = `message ${role}`;
   
-  // إضافة الكلاس الخاص بالمؤشر فقط للذكاء الاصطناعي
-  const bubbleClass = role === 'ai' ? 'msg-bubble ai typing-cursor' : 'msg-bubble user';
-  div.innerHTML = `<div class="${bubbleClass}"></div>`;
+  let html = `<div class="msg-bubble"></div>`;
+  if (role === 'ai') {
+    html += `<button class="copy-btn" onclick="copyText(this)">نسخ 📋</button>`;
+  }
+  div.innerHTML = html;
   container.appendChild(div);
   
   const bubble = div.querySelector('.msg-bubble');
-  
-  if (role === 'ai' && text !== "") {
+  if (role === 'ai' && !isHistory) {
     typeWriter(bubble, text);
   } else {
-    bubble.innerText = text;
+    bubble.textContent = text;
   }
-  
   container.scrollTop = container.scrollHeight;
-  return bubble;
 }
 
 function typeWriter(element, text) {
   let i = 0;
-  element.innerHTML = "";
-  
-  // استخدام وظيفة زمنية أكثر استقراراً
-  function type() {
+  const interval = setInterval(() => {
     if (i < text.length) {
-      // استخدام textContent لإضافة الحرف لضمان عدم حدوث مشاكل في الرموز
       element.textContent += text.charAt(i++);
-      
-      // التمرير التلقائي السلس
-      const container = document.getElementById('messages');
-      container.scrollTop = container.scrollHeight;
-      
-      setTimeout(type, 40); // سرعة متوسطة مريحة للعين
+      document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
     } else {
-      element.classList.remove('typing-cursor');
+      clearInterval(interval);
     }
-  }
-  type();
+  }, 25);
+}
+
+function copyText(btn) {
+  const text = btn.previousElementSibling.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const originalText = btn.textContent;
+    btn.textContent = "تم النسخ! ✅";
+    setTimeout(() => btn.textContent = originalText, 2000);
+  });
 }
 
 async function sendMessage() {
@@ -210,6 +212,7 @@ async function sendMessage() {
   if (!text) return;
 
   addMessage('user', text);
+  currentChat.push({ role: 'user', content: text });
   input.value = '';
 
   try {
@@ -218,25 +221,51 @@ async function sendMessage() {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...chatHistory, { role: 'user', content: text }]
+        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...currentChat]
       })
     });
-    
     const data = await response.json();
     const reply = data.choices[0].message.content;
     
     addMessage('ai', reply);
-    chatHistory.push({ role: 'user', content: text }, { role: 'assistant', content: reply });
-    if(chatHistory.length > 20) chatHistory.splice(0, 2);
-
-  } catch (err) { 
-    addMessage('ai', "خطأ في الاتصال. تأكد من الإنترنت."); 
-  }
+    currentChat.push({ role: 'assistant', content: reply });
+    saveToHistory();
+  } catch (err) { addMessage('ai', "حدث خطأ."); }
 }
 
-document.getElementById('userInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-});
+function saveToHistory() {
+    if (allChats.length === 0 || currentChat.length <= 2) {
+        allChats.push([...currentChat]);
+    } else {
+        allChats[allChats.length - 1] = [...currentChat];
+    }
+    if (allChats.length > 10) allChats.shift();
+    localStorage.setItem('farsi_chats', JSON.stringify(allChats));
+    updateSidebarUI();
+}
+
+function updateSidebarUI() {
+    const list = document.getElementById('historyList');
+    list.innerHTML = '';
+    allChats.forEach((chat, index) => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.textContent = `محادثة ${index + 1}: ${chat[0] ? chat[0].content : "..."}`;
+        item.onclick = () => loadChat(index);
+        list.appendChild(item);
+    });
+}
+
+function loadChat(index) {
+    document.getElementById('messages').innerHTML = '';
+    currentChat = allChats[index];
+    currentChat.forEach(msg => {
+        addMessage(msg.role === 'user' ? 'user' : 'ai', msg.content, true);
+    });
+    toggleSidebar();
+}
+
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
 </script>
 </body>
 </html>
